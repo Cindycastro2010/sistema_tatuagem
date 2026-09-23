@@ -16,8 +16,7 @@ Se a máquina foi reiniciada desde a última aula, repita os passos de sempre an
 3. **Recrie e ative o ambiente virtual**, dentro da pasta `backend`:
    ```powershell
    cd backend
-   python -m venv venv
-   .\venv\Scripts\Activate.ps1
+   
    ```
    Se der erro de política de execução ou de `pydantic-core`/Rust, o passo a passo de correção está na Aula 3.
 4. **Reinstale as dependências e rode a API:**
