@@ -17,7 +17,6 @@ router = APIRouter()
 # MODELOS DE DADOS
 # ============================================================
 
-# Define os campos que o tatuador deve ter
 class Tatuador(BaseModel):
     nometatuador: str
     cpf: str
@@ -27,7 +26,6 @@ class Tatuador(BaseModel):
     idsenioridade: int
 
 
-# Define a lista de estilos enviados pelo frontend
 class EstilosDoTatuador(BaseModel):
     idestilos: List[int]
 
@@ -36,7 +34,7 @@ class EstilosDoTatuador(BaseModel):
 # GET /tatuadores — lista todos os tatuadores
 # ============================================================
 
-@router.get("/tatuadores")
+@router.get("")
 def listar_tatuadores():
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
@@ -49,8 +47,8 @@ def listar_tatuadores():
     """)
 
     tatuadores = cursor.fetchall()
-
     conn.close()
+
     return tatuadores
 
 
@@ -58,7 +56,7 @@ def listar_tatuadores():
 # GET /tatuadores/{id} — busca um tatuador pelo ID
 # ============================================================
 
-@router.get("/tatuadores/{id}")
+@router.get("/{id}")
 def buscar_tatuador(id: int):
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
@@ -69,7 +67,6 @@ def buscar_tatuador(id: int):
     )
 
     tatuador = cursor.fetchone()
-
     conn.close()
 
     if not tatuador:
@@ -82,7 +79,7 @@ def buscar_tatuador(id: int):
 # POST /tatuadores — cadastra um novo tatuador
 # ============================================================
 
-@router.post("/tatuadores")
+@router.post("")
 def criar_tatuador(tatuador: Tatuador):
     conn = conectar()
     cursor = conn.cursor()
@@ -104,7 +101,6 @@ def criar_tatuador(tatuador: Tatuador):
         )
     )
 
-    # Recupera o ID gerado automaticamente pelo MySQL
     novo_id = cursor.lastrowid
 
     conn.commit()
@@ -120,7 +116,7 @@ def criar_tatuador(tatuador: Tatuador):
 # PUT /tatuadores/{id} — atualiza um tatuador existente
 # ============================================================
 
-@router.put("/tatuadores/{id}")
+@router.put("/{id}")
 def atualizar_tatuador(id: int, tatuador: Tatuador):
     conn = conectar()
     cursor = conn.cursor()
@@ -157,7 +153,7 @@ def atualizar_tatuador(id: int, tatuador: Tatuador):
 # DELETE /tatuadores/{id} — exclui um tatuador
 # ============================================================
 
-@router.delete("/tatuadores/{id}")
+@router.delete("/{id}")
 def deletar_tatuador(id: int):
     conn = conectar()
     cursor = conn.cursor()
@@ -190,7 +186,7 @@ def deletar_tatuador(id: int):
 # Lista os estilos que um tatuador domina
 # ============================================================
 
-@router.get("/tatuadores/{id}/estilos")
+@router.get("/{id}/estilos")
 def listar_estilos_do_tatuador(id: int):
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
@@ -207,8 +203,8 @@ def listar_estilos_do_tatuador(id: int):
     )
 
     estilos = cursor.fetchall()
-
     conn.close()
+
     return estilos
 
 
@@ -217,7 +213,7 @@ def listar_estilos_do_tatuador(id: int):
 # Substitui os estilos cadastrados para um tatuador
 # ============================================================
 
-@router.put("/tatuadores/{id}/estilos")
+@router.put("/{id}/estilos")
 def atualizar_estilos_do_tatuador(
     id: int,
     dados: EstilosDoTatuador
@@ -226,7 +222,7 @@ def atualizar_estilos_do_tatuador(
     cursor = conn.cursor()
 
     try:
-        # Remove os estilos que estavam associados anteriormente
+        # Remove os estilos associados anteriormente
         cursor.execute(
             "DELETE FROM tatuador_estilo WHERE idtatuador = %s",
             (id,)

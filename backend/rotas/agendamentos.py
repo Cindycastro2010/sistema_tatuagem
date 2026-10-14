@@ -1,9 +1,5 @@
 # ============================================================
 # rotas/agendamentos.py — CRUD de Agendamentos
-# Descrição: Endpoints para gerenciar os agendamentos de sessões
-#            de tatuagem. Cada agendamento liga um cliente a um
-#            tatuador (duas chaves estrangeiras). Também recebe o
-#            upload da imagem do desenho aprovado.
 # ============================================================
 
 from fastapi import APIRouter, UploadFile, File
@@ -14,122 +10,239 @@ import os
 
 router = APIRouter()
 
-# Modelo de dados — define os campos que o agendamento deve ter
+
 class Agendamento(BaseModel):
-    idcliente: int                          # obrigatório — aponta para a tabela cliente
-    idtatuador: int                         # obrigatório — aponta para a tabela tatuador
-    dataagendamento: str                    # obrigatório
-    horaagendamento: str                    # obrigatório
-    descricaotatuagem: Optional[str] = None # opcional
-    valortatuagem: Optional[float] = None   # opcional
-    status: Optional[str] = None            # só é usado ao atualizar
+    idcliente: int
+    idtatuador: int
+    dataagendamento: str
+    horaagendamento: str
+    descricaotatuagem: Optional[str] = None
+    valortatuagem: Optional[float] = None
+    status: Optional[str] = None
 
 
-# POST /agendamentos — cadastra um novo agendamento
-@router.post("/agendamentos")
+# POST /agendamentos
+@router.post("")
 def criar_agendamento(agendamento: Agendamento):
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute(
-        """INSERT INTO agendamento (idcliente, idtatuador, dataagendamento, horaagendamento, descricaotatuagem, valortatuagem)
-           VALUES (%s, %s, %s, %s, %s, %s)""",
-        (agendamento.idcliente, agendamento.idtatuador, agendamento.dataagendamento,
-         agendamento.horaagendamento, agendamento.descricaotatuagem, agendamento.valortatuagem)
-    )
-    novo_id = cursor.lastrowid   # o ID que o MySQL gerou sozinho pro novo agendamento (AUTO_INCREMENT)
-    conn.commit()
-    conn.close()
-    return {"mensagem": "Agendamento cadastrado com sucesso", "idagendamento": novo_id}
+
+    try:
+        cursor.execute(
+            """
+            INSERT INTO agendamento (
+                idcliente, idtatuador, dataagendamento,
+                horaagendamento, descricaotatuagem, valortatuagem
+            )
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """,
+            (
+                agendamento.idcliente,
+                agendamento.idtatuador,
+                agendamento.dataagendamento,
+                agendamento.horaagendamento,
+                agendamento.descricaotatuagem,
+                agendamento.valortatuagem
+            )
+        )
+
+        novo_id = cursor.lastrowid
+        conn.commit()
+
+        return {
+            "mensagem": "Agendamento cadastrado com sucesso",
+            "idagendamento": novo_id
+        }
+
+    except Exception:
+        conn.rollback()
+        raise
+
+    finally:
+        conn.close()
 
 
-# GET /agendamentos — lista todos os agendamentos, já com nome do cliente e do tatuador
-@router.get("/agendamentos")
+# GET /agendamentos
+@router.get("")
 def listar_agendamentos():
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("""
-        SELECT agendamento.*, cliente.nome AS cliente, tatuador.nometatuador AS tatuador
-        FROM agendamento
-        JOIN cliente  ON agendamento.idcliente  = cliente.idcliente
-        JOIN tatuador ON agendamento.idtatuador = tatuador.idtatuador
-    """)
-    agendamentos = cursor.fetchall()
-    conn.close()
 
-    # o mysql-connector-python devolve colunas TIME como um "timedelta" (tempo decorrido),
-    # não como texto — por isso convertemos aqui pra "HH:MM:SS" antes de mandar pro frontend
-    for a in agendamentos:
-        total_segundos = int(a["horaagendamento"].total_seconds())
-        horas, resto = divmod(total_segundos, 3600)
-        minutos, segundos = divmod(resto, 60)
-        a["horaagendamento"] = f"{horas:02d}:{minutos:02d}:{segundos:02d}"
+    try:
+        cursor.execute("""
+            SELECT agendamento.*,
+                   cliente.nome AS cliente,
+                   tatuador.nometatuador AS tatuador
+            FROM agendamento
+            JOIN cliente
+                ON agendamento.idcliente = cliente.idcliente
+            JOIN tatuador
+                ON agendamento.idtatuador = tatuador.idtatuador
+        """)
 
-    return agendamentos
+        agendamentos = cursor.fetchall()
+
+        for agendamento in agendamentos:
+            hora = agendamento["horaagendamento"]
+
+            if hasattr(hora, "total_seconds"):
+                total = int(hora.total_seconds())
+                horas, resto = divmod(total, 3600)
+                minutos, segundos = divmod(resto, 60)
+                agendamento["horaagendamento"] = (
+                    f"{horas:02d}:{minutos:02d}:{segundos:02d}"
+                )
+
+        return agendamentos
+
+    finally:
+        conn.close()
 
 
-# GET /agendamentos/{id} — busca um agendamento pelo ID
-@router.get("/agendamentos/{id}")
+# GET /agendamentos/{id}
+@router.get("/{id}")
 def buscar_agendamento(id: int):
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM agendamento WHERE idagendamento = %s", (id,))
-    agendamento = cursor.fetchone()
-    conn.close()
-    if not agendamento:
-        return {"erro": "Agendamento não encontrado"}
 
-    # mesma conversão da listagem — sem isso, horaagendamento viria como número de segundos
-    total_segundos = int(agendamento["horaagendamento"].total_seconds())
-    horas, resto = divmod(total_segundos, 3600)
-    minutos, segundos = divmod(resto, 60)
-    agendamento["horaagendamento"] = f"{horas:02d}:{minutos:02d}:{segundos:02d}"
+    try:
+        cursor.execute(
+            "SELECT * FROM agendamento WHERE idagendamento = %s",
+            (id,)
+        )
 
-    return agendamento
+        agendamento = cursor.fetchone()
+
+        if not agendamento:
+            return {"erro": "Agendamento não encontrado"}
+
+        hora = agendamento["horaagendamento"]
+
+        if hasattr(hora, "total_seconds"):
+            total = int(hora.total_seconds())
+            horas, resto = divmod(total, 3600)
+            minutos, segundos = divmod(resto, 60)
+            agendamento["horaagendamento"] = (
+                f"{horas:02d}:{minutos:02d}:{segundos:02d}"
+            )
+
+        return agendamento
+
+    finally:
+        conn.close()
 
 
-# PUT /agendamentos/{id} — atualiza um agendamento existente
-@router.put("/agendamentos/{id}")
+# PUT /agendamentos/{id}
+@router.put("/{id}")
 def atualizar_agendamento(id: int, agendamento: Agendamento):
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute(
-        """UPDATE agendamento
-           SET idcliente=%s, idtatuador=%s, dataagendamento=%s, horaagendamento=%s,
-               descricaotatuagem=%s, valortatuagem=%s, status=%s
-           WHERE idagendamento=%s""",
-        (agendamento.idcliente, agendamento.idtatuador, agendamento.dataagendamento,
-         agendamento.horaagendamento, agendamento.descricaotatuagem,
-         agendamento.valortatuagem, agendamento.status, id)
-    )
-    conn.commit()
-    conn.close()
-    return {"mensagem": "Agendamento atualizado com sucesso"}
+
+    try:
+        cursor.execute(
+            """
+            UPDATE agendamento
+            SET idcliente = %s,
+                idtatuador = %s,
+                dataagendamento = %s,
+                horaagendamento = %s,
+                descricaotatuagem = %s,
+                valortatuagem = %s,
+                status = %s
+            WHERE idagendamento = %s
+            """,
+            (
+                agendamento.idcliente,
+                agendamento.idtatuador,
+                agendamento.dataagendamento,
+                agendamento.horaagendamento,
+                agendamento.descricaotatuagem,
+                agendamento.valortatuagem,
+                agendamento.status,
+                id
+            )
+        )
+
+        conn.commit()
+        return {"mensagem": "Agendamento atualizado com sucesso"}
+
+    except Exception:
+        conn.rollback()
+        raise
+
+    finally:
+        conn.close()
 
 
-# DELETE /agendamentos/{id} — deleta um agendamento
-@router.delete("/agendamentos/{id}")
+# DELETE /agendamentos/{id}
+@router.delete("/{id}")
 def deletar_agendamento(id: int):
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM agendamento WHERE idagendamento = %s", (id,))
-    conn.commit()
-    conn.close()
-    return {"mensagem": "Agendamento deletado com sucesso"}
+
+    try:
+        cursor.execute(
+            "DELETE FROM agendamento WHERE idagendamento = %s",
+            (id,)
+        )
+
+        conn.commit()
+        return {"mensagem": "Agendamento deletado com sucesso"}
+
+    except Exception:
+        conn.rollback()
+        raise
+
+    finally:
+        conn.close()
 
 
-# POST /agendamentos/{id}/desenho — recebe a imagem do desenho aprovado e associa ao agendamento
-@router.post("/agendamentos/{id}/desenho")
-async def upload_desenho(id: int, arquivo: UploadFile = File(...)):
-    nome_arquivo = f"{id}_{arquivo.filename}"   # o id na frente evita nomes repetidos entre agendamentos
+# POST /agendamentos/{id}/desenho
+@router.post("/{id}/desenho")
+async def upload_desenho(
+    id: int,
+    arquivo: UploadFile = File(...)
+):
+    os.makedirs("uploads", exist_ok=True)
+
+    nome_original = os.path.basename(
+        arquivo.filename or "desenho"
+    )
+    nome_arquivo = f"{id}_{nome_original}"
     caminho = os.path.join("uploads", nome_arquivo)
 
-    conteudo = await arquivo.read()       # lê o conteúdo do arquivo enviado
-    with open(caminho, "wb") as f:        # "wb" = write binary — é uma imagem, não texto
-        f.write(conteudo)
+    conteudo = await arquivo.read()
 
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute("UPDATE agendamento SET desenhoaprovado=%s WHERE idagendamento=%s", (nome_arquivo, id))
-    conn.commit()
-    conn.close()
-    return {"mensagem": "Desenho enviado com sucesso", "arquivo": nome_arquivo}
+
+    try:
+        cursor.execute(
+            """
+            UPDATE agendamento
+            SET desenhoaprovado = %s
+            WHERE idagendamento = %s
+            """,
+            (nome_arquivo, id)
+        )
+
+        conn.commit()
+
+        with open(caminho, "wb") as f:
+            f.write(conteudo)
+
+        return {
+            "mensagem": "Desenho enviado com sucesso",
+            "arquivo": nome_arquivo
+        }
+
+    except Exception:
+        conn.rollback()
+
+        if os.path.exists(caminho):
+            os.remove(caminho)
+
+        raise
+
+    finally:
+        conn.close()
