@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard — Estúdio de Tatuagem</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <title>Dashboard — Estúdio de Tatuagem</title>
+    <!-- Substitua se necessário pelo link oficial do Bootstrap se o seu css/style.css não o incluir -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <span class="navbar-brand">Estúdio de Tatuagem</span>
+            <button onclick="sair()" class="btn btn-outline-light btn-sm">Sair</button>
+        </div>
+    </nav>
 
-  <nav class="navbar navbar-dark bg-dark mb-4">
     <div class="container">
-      <span class="navbar-brand">Estúdio de Tatuagem</span>
-      <button onclick="sair()" class="btn btn-outline-light btn-sm">Sair</button>
+        <h1 class="mb-4">Painel</h1>
+        
+        <!-- O segredo está aqui: TODOS os blocos col-md-4 precisam ficar dentro desta row -->
+        <div class="row g-3">
+            <div class="col-md-4">
+                <a href="clientes.html" class="btn btn-primary w-100 py-3">Clientes</a>
+            </div>
+            <div class="col-md-4">
+                <a href="tatuadores.html" class="btn btn-primary w-100 py-3">Tatuadores</a>
+            </div>
+            <div class="col-md-4">
+                <a href="agendamentos.html" class="btn btn-primary w-100 py-3">Agendamentos</a>
+            </div>
+            <div class="col-md-4">
+                <a href="senioridade.html" class="btn btn-secondary w-100 py-3">Senioridade</a>
+            </div>
+            <div class="col-md-4">
+                <a href="estilos.html" class="btn btn-secondary w-100 py-3">Estilos</a>
+            </div>
+            <div class="col-md-4">
+                <a href="cadastro.html" class="btn btn-secondary w-100 py-3">Novo Funcionário</a>
+            </div>
+        </div>
     </div>
-  </nav>
 
-  <div class="container">
-    <h1 class="mb-4">Painel</h1>
-    <div class="row g-3">
-      <div class="col-md-4">
-        <a href="clientes.html" class="btn btn-primary w-100 py-3">Clientes</a>
-      </div>
-      <div class="col-md-4">
-        <a href="tatuadores.html" class="btn btn-primary w-100 py-3">Tatuadores</a>
-      </div>
-      <div class="col-md-4">
-        <a href="agendamentos.html" class="btn btn-primary w-100 py-3">Agendamentos</a>
-      </div>
-      <div class="col-md-4">
-        <a href="senioridade.html" class="btn btn-secondary w-100 py-3">Senioridade</a>
-      </div>
-      <div class="col-md-4">
-        <a href="estilos.html" class="btn btn-secondary w-100 py-3">Estilos</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-  <a href="cadastro.html" class="btn btn-secondary w-100 py-3">Novo Funcionário</a>
-</div>
-
-  <script src="js/auth.js"></script>
-  <script>
-    protegerPagina()   // o dashboard também é protegido — sem login, não entra
-  </script>
-
+    <script src="js/auth.js"></script>
+    <script>
+        protegerPagina() // o dashboard também é protegido — sem login, não entra
+    </script>
 </body>
 </html>

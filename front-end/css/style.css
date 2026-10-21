@@ -1,144 +1,280 @@
 /* ==========================================
-   ESTÚDIO DE TATUAGEM - ESTILO GLOBAL
+   ESTÚDIO DE TATUAGEM - TEMA ROSA 🌸
+   Funciona com ou sem Bootstrap
    ========================================== */
 
 :root {
-  --bg-primary: #121214;
-  --bg-secondary: #202024;
-  --bg-card: #29292e;
-  --text-main: #e1e1e6;
-  --text-muted: #9c9cb3;
-  --accent-color: #8257e5; /* Roxo estilo Purple */
-  --accent-hover: #9466ff;
-  --danger-color: #f75a68;
-  --border-color: #323238;
+  --rosa-fundo: #fff0f6;
+  --rosa-claro: #ffe3ef;
+  --rosa-hover: #fff5fa;
+  --rosa-principal: #e64980;
+  --rosa-escuro: #c2255c;
+  --rosa-borda: #fcc2d7;
+  --texto: #4a1a2e;
+  --texto-suave: #9c5c75;
+  --branco: #ffffff;
+  --vermelho: #d6336c;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-main);
+  background: linear-gradient(180deg, #fff0f6 0%, #ffe3ef 100%);
+  color: var(--texto);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
+  margin: 0;
+  padding: 16px 24px;
 }
 
 /* --- Navegação --- */
+nav,
 .navbar {
-  background-color: var(--bg-secondary) !important;
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
+  background: var(--branco);
+  border: 1px solid var(--rosa-borda);
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(230, 73, 128, 0.12);
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
 }
 
-.navbar-brand {
+.navbar-brand,
+nav strong {
   font-weight: 700;
-  letter-spacing: 0.5px;
-  color: var(--accent-hover) !important;
+  font-size: 1.1rem;
+  color: var(--rosa-principal);
+  margin-right: 12px;
 }
 
-.navbar a.text-light {
-  color: var(--text-muted) !important;
-  transition: color 0.2s ease;
+nav a {
+  color: var(--texto-suave);
   text-decoration: none;
   font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
-.navbar a.text-light:hover,
-.navbar a.text-light.active {
-  color: var(--text-main) !important;
+nav a:hover {
+  color: var(--rosa-escuro);
+  background: var(--rosa-claro);
 }
 
 /* --- Títulos --- */
 h1 {
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 1.5rem;
-  font-size: 1.75rem;
-  border-left: 4px solid var(--accent-color);
-  padding-left: 10px;
+  color: var(--rosa-escuro);
+  margin: 0 0 20px;
+  padding-left: 12px;
+  border-left: 5px solid var(--rosa-principal);
 }
 
-/* --- Formulários e Inputs --- */
-.form-control, .form-select {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-  border-radius: 6px;
-  padding: 0.6rem 0.75rem;
+/* --- Formulários --- */
+input,
+select,
+textarea {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  background: var(--branco);
+  border: 1.5px solid var(--rosa-borda);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  color: var(--texto);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.form-control:focus, .form-select:focus {
-  background-color: var(--bg-secondary);
-  color: var(--text-main);
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 0.2rem rgba(130, 87, 229, 0.25);
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--rosa-principal);
+  box-shadow: 0 0 0 4px rgba(230, 73, 128, 0.18);
 }
 
-.form-control::placeholder {
-  color: var(--text-muted);
-  opacity: 1;
+input::placeholder {
+  color: var(--texto-suave);
 }
 
 /* --- Botões --- */
-.btn-primary {
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
+button,
+.btn,
+input[type="submit"] {
+  background: linear-gradient(135deg, #f06595, var(--rosa-principal));
+  color: var(--branco);
+  border: none;
+  border-radius: 10px;
+  padding: 8px 18px;
   font-weight: 600;
-  border-radius: 6px;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(230, 73, 128, 0.25);
+  transition: transform 0.1s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-.btn-primary:hover {
-  background-color: var(--accent-hover);
-  border-color: var(--accent-hover);
+button:hover,
+.btn:hover {
+  background: linear-gradient(135deg, var(--rosa-principal), var(--rosa-escuro));
+  box-shadow: 0 5px 12px rgba(230, 73, 128, 0.35);
 }
 
-.btn-outline-light {
-  border-color: var(--border-color);
-  color: var(--text-muted);
+button:active {
+  transform: scale(0.97);
 }
 
-.btn-outline-light:hover {
-  background-color: var(--border-color);
-  color: var(--text-main);
-  border-color: var(--border-color);
+/* Botão Cadastrar: um pouco mais largo e com destaque */
+form button:first-of-type,
+button[type="submit"] {
+  padding: 10px 26px;
+  margin-top: 4px;
+}
+
+/* Botões de ação na tabela (Editar e Excluir) */
+td button {
+  background: var(--branco);
+  color: var(--rosa-escuro);
+  border: 1.5px solid var(--rosa-borda);
+  box-shadow: none;
+  padding: 6px 14px;
+  margin: 2px 3px;
+}
+
+td button:hover {
+  background: var(--rosa-claro);
+  color: var(--rosa-escuro);
+  box-shadow: none;
+}
+
+/* Botão Excluir: vermelho-rosado */
+td button:nth-of-type(2) {
+  color: var(--vermelho);
+  border-color: #ffc9d8;
+}
+
+td button:nth-of-type(2):hover {
+  background: #ffe3ec;
+}
+
+/* Botão Sair */
+.btn-sair,
+#sair,
+nav button {
+  background: var(--branco);
+  color: var(--rosa-escuro);
+  border: 1.5px solid var(--rosa-principal);
+  box-shadow: none;
+}
+
+nav button:hover {
+  background: var(--rosa-principal);
+  color: var(--branco);
 }
 
 /* --- Tabelas --- */
-.table {
-  color: var(--text-main);
-  background-color: var(--bg-secondary);
-  border-radius: 8px;
-  overflow: hidden;
+table {
+  width: 100%;
+  background: var(--branco);
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--rosa-borda);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(230, 73, 128, 0.1);
+  margin-top: 24px;
 }
 
-.table th {
-  background-color: #1a1a1e;
-  color: var(--text-muted);
-  border-bottom: 2px solid var(--border-color);
-  font-weight: 600;
+thead th {
+  background: var(--rosa-claro);
+  color: var(--rosa-escuro);
+  font-size: 0.78rem;
+  font-weight: 700;
   text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.5px;
-  padding: 1rem;
+  letter-spacing: 0.6px;
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 2px solid var(--rosa-borda);
 }
 
-.table td {
-  background-color: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
+td {
+  padding: 12px 16px;
+  color: var(--texto);
+  border-bottom: 1px solid #ffe8f1;
   vertical-align: middle;
-  padding: 0.85rem 1rem;
-  color: var(--text-main);
 }
 
-.table tbody tr:last-child td {
+tbody tr:last-child td {
   border-bottom: none;
 }
 
-.table tbody tr:hover td {
-  background-color: #25252b;
+tbody tr {
+  transition: background 0.15s ease;
+}
+
+tbody tr:hover td {
+  background: var(--rosa-hover);
+}
+
+/* --- Cards --- */
+.card {
+  background: var(--branco);
+  border: 1px solid var(--rosa-borda);
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(230, 73, 128, 0.1);
+}
+
+/* --- Utilitários --- */
+.text-danger-estudio {
+  color: var(--vermelho) !important;
+}
+
+/* --- Grade do painel --- */
+.menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.menu-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+  padding: 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f06595, var(--rosa-principal));
+  color: var(--branco);
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(230, 73, 128, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(230, 73, 128, 0.35);
+  color: var(--branco);
+  background: linear-gradient(135deg, var(--rosa-principal), var(--rosa-escuro));
+}
+
+/* Cards secundários: versão branca com contorno */
+.menu-card-secundario {
+  background: var(--branco);
+  color: var(--rosa-escuro);
+  border: 1.5px solid var(--rosa-borda);
+  box-shadow: 0 4px 12px rgba(230, 73, 128, 0.1);
+}
+
+.menu-card-secundario:hover {
+  background: var(--rosa-claro);
+  color: var(--rosa-escuro);
 }
