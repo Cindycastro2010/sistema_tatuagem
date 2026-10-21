@@ -1,0 +1,144 @@
+/* ==========================================
+   ESTÚDIO DE TATUAGEM - ESTILO GLOBAL
+   ========================================== */
+
+:root {
+  --bg-primary: #121214;
+  --bg-secondary: #202024;
+  --bg-card: #29292e;
+  --text-main: #e1e1e6;
+  --text-muted: #9c9cb3;
+  --accent-color: #8257e5; /* Roxo estilo Purple */
+  --accent-hover: #9466ff;
+  --danger-color: #f75a68;
+  --border-color: #323238;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+/* --- Navegação --- */
+.navbar {
+  background-color: var(--bg-secondary) !important;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--accent-hover) !important;
+}
+
+.navbar a.text-light {
+  color: var(--text-muted) !important;
+  transition: color 0.2s ease;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar a.text-light:hover,
+.navbar a.text-light.active {
+  color: var(--text-main) !important;
+}
+
+/* --- Títulos --- */
+h1 {
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  border-left: 4px solid var(--accent-color);
+  padding-left: 10px;
+}
+
+/* --- Formulários e Inputs --- */
+.form-control, .form-select {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.2rem rgba(130, 87, 229, 0.25);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+/* --- Botões --- */
+.btn-primary {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  font-weight: 600;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn-outline-light {
+  border-color: var(--border-color);
+  color: var(--text-muted);
+}
+
+.btn-outline-light:hover {
+  background-color: var(--border-color);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+/* --- Tabelas --- */
+.table {
+  color: var(--text-main);
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.table th {
+  background-color: #1a1a1e;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  padding: 1rem;
+}
+
+.table td {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+  padding: 0.85rem 1rem;
+  color: var(--text-main);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover td {
+  background-color: #25252b;
+}
