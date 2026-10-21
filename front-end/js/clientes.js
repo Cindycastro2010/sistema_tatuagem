@@ -1,7 +1,9 @@
-const API = 'http://127.0.0.1:8000'  // endereço da nossa API
+const API = 'http://127.0.0.1:8000'  // Porta 8001 que está rodando sua API
 const formCliente = document.getElementById('form-cliente')
 const botaoSubmit = document.getElementById('btn-submit-cliente')
+protegerPagina()   // bloqueia a página se não tiver login
 
+// 4.1 — Limpar formulário
 function limparFormulario() {
   formCliente.reset()
   delete formCliente.dataset.idCliente
@@ -10,8 +12,9 @@ function limparFormulario() {
   botaoSubmit.classList.add('btn-primary')
 }
 
+// 4.2 — Listar clientes
 async function listarClientes() {
-  const resposta = await fetch(`${API}/clientes`)
+  const resposta = await fetchAutenticado(`${API}/clientes`)
   const clientes = await resposta.json()
 
   const corpo = document.getElementById('corpo-tabela')
@@ -34,8 +37,7 @@ async function listarClientes() {
   })
 }
 
-listarClientes()
-
+// 4.3 — Cadastrar e atualizar clientes
 formCliente.addEventListener('submit', async (e) => {
   e.preventDefault()
 
@@ -43,7 +45,8 @@ formCliente.addEventListener('submit', async (e) => {
     nome: document.getElementById('nome').value,
     cpf: document.getElementById('cpf').value,
     telefone: document.getElementById('telefone').value || null,
-    datacadastro: new Date().toISOString().split('T')[0],
+    datacadastro: new Date().toISOString().split('T')[0], //  Correto!
+
     cidade: document.getElementById('cidade').value || null,
     uf: document.getElementById('uf').value || null
   }
@@ -51,13 +54,13 @@ formCliente.addEventListener('submit', async (e) => {
   const idCliente = formCliente.dataset.idCliente
 
   if (idCliente) {
-    await fetch(`${API}/clientes/${idCliente}`, {
+    await fetchAutenticado(`${API}/clientes/${idCliente}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cliente)
     })
   } else {
-    await fetch(`${API}/clientes`, {
+    await fetchAutenticado(`${API}/clientes`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cliente)
@@ -67,7 +70,6 @@ formCliente.addEventListener('submit', async (e) => {
   limparFormulario()
   listarClientes()
 })
-
 
 function preencherFormularioEdicao(cliente) {
   document.getElementById('nome').value = cliente.nome
@@ -82,10 +84,13 @@ function preencherFormularioEdicao(cliente) {
   botaoSubmit.classList.add('btn-success')
 }
 
+// 4.4 — Excluir cliente
 async function deletarCliente(id) {
   if (!confirm('Tem certeza que deseja excluir este cliente?')) return
 
-  await fetch(`${API}/clientes/${id}`, { method: 'DELETE' })
+  await fetchAutenticado(`${API}/clientes/${id}`, { method: 'DELETE' })
   listarClientes()
 }
 
+// Inicializa a tabela trazendo os dados assim que abre a página
+listarClientes()

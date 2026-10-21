@@ -46,10 +46,11 @@ def login(dados: Login):
     # monta o "conteúdo" do crachá: quem é, qual o tipo de acesso, e até quando vale
     expira_em = datetime.now(timezone.utc) + timedelta(hours=2)
     payload = {
-        "sub": usuario["email"],   # "sub" = subject, o dono desse token
-        "tipo": usuario["tipo"],
-        "exp": expira_em           # depois desse horário, o token para de valer
-    }
+    "sub": usuario["email"],
+    "nome": usuario["nome"],
+    "tipo": usuario["tipo"],
+    "exp": expira_em
+}
 
     # gera o token, assinado com a nossa chave secreta
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITMO)
