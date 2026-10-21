@@ -1,0 +1,277 @@
+/* ========================================
+   DASHBOARD — ESTÚDIO DE TATUAGEM
+   Tema: Rosa e Branco 🌸
+   ======================================== */
+
+/* Importação de fonte (precisa vir antes de qualquer outra regra) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* Variáveis de cores */
+:root {
+  --rosa-claro: #fff0f5;
+  --rosa-fundo: #fff7fa;
+  --rosa: #e879a5;
+  --rosa-escuro: #d65387;
+  --rosa-hover: #c94279;
+  --branco: #ffffff;
+  --texto: #55434c;
+  --texto-suave: #927c86;
+  --sombra: 0 8px 25px rgba(214, 83, 135, 0.10);
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #fff7fa 0%, #ffeaf2 100%);
+  color: var(--texto);
+  min-height: 100vh;
+}
+
+/* Barra superior */
+.navbar {
+  background: linear-gradient(110deg, #d65387, #ed91b4) !important;
+  padding: 20px 0;
+  box-shadow: 0 5px 20px rgba(214, 83, 135, 0.20);
+  border-bottom: 3px solid rgba(255, 255, 255, 0.45);
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-brand {
+  color: var(--branco) !important;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+}
+
+/* Botão sair */
+.navbar .btn-outline-light {
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  color: var(--branco);
+  background: transparent;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.navbar .btn-outline-light:hover {
+  background: var(--branco);
+  color: var(--rosa-escuro);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(90, 30, 55, 0.12);
+}
+
+/* Conteúdo principal */
+.container {
+  width: 90%;
+  max-width: 1140px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body > .container {
+  padding-top: 22px;
+  padding-bottom: 60px;
+}
+
+/* Título */
+h1 {
+  color: var(--rosa-escuro);
+  font-size: clamp(2rem, 4vw, 2.7rem);
+  font-weight: 800;
+  margin-bottom: 30px !important;
+  letter-spacing: -1px;
+}
+
+h1::after {
+  content: "";
+  display: block;
+  width: 75px;
+  height: 5px;
+  margin-top: 12px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #d65387, #f4b4cc);
+}
+
+/* Grade dos botões */
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin: 0;
+}
+
+.row > * {
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+}
+
+/* Botões do painel */
+.row .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 125px;
+  width: 100%;
+  padding: 25px 18px !important;
+  border: 1px solid #f8d8e5;
+  border-radius: 20px;
+  background: var(--branco);
+  color: var(--rosa-escuro);
+  box-shadow: var(--sombra);
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+/* Detalhe decorativo lateral dos cartões */
+.row .btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(180deg, #f4a9c5, #d65387);
+  transition: width 0.3s ease;
+}
+
+.row .btn:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(214, 83, 135, 0.18);
+  background: #fffafd;
+  color: var(--rosa-hover);
+}
+
+.row .btn:hover::before {
+  width: 8px;
+}
+
+/* Botões principais */
+.row .btn-primary {
+  background: linear-gradient(135deg, #ffffff, #fff4f8);
+  border-color: #f2c6d8;
+  color: #cb477d;
+}
+
+.row .btn-primary:hover {
+  background: linear-gradient(135deg, #fff0f6, #ffe1ed);
+}
+
+/* Botões secundários */
+.row .btn-secondary {
+  background: var(--branco);
+  color: #927080;
+  border-color: #f0dce5;
+}
+
+.row .btn-secondary::before {
+  background: linear-gradient(180deg, #e8b8cc, #cc8ba8);
+}
+
+.row .btn-secondary:hover {
+  background: #fff3f8;
+  color: var(--rosa-escuro);
+}
+
+/* Acessibilidade: navegação pelo teclado */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #d65387;
+  outline-offset: 4px;
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .row .btn {
+    min-height: 115px;
+  }
+}
+
+/* Celulares */
+@media (max-width: 576px) {
+  .container {
+    width: 92%;
+  }
+
+  .navbar {
+    padding: 16px 0;
+  }
+
+  .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .navbar .btn-outline-light {
+    padding: 7px 15px;
+  }
+
+  body > .container {
+    padding-top: 18px;
+  }
+
+  h1 {
+    margin-bottom: 24px !important;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .row .btn {
+    min-height: 88px;
+    border-radius: 16px;
+    font-size: 1rem;
+  }
+}
+
+/* Animação suave de entrada (só se o usuário não pediu menos movimento) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes aparecer {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .row > * {
+    animation: aparecer 0.5s ease both;
+  }
+
+  .row > *:nth-child(2) { animation-delay: 0.07s; }
+  .row > *:nth-child(3) { animation-delay: 0.14s; }
+  .row > *:nth-child(4) { animation-delay: 0.21s; }
+  .row > *:nth-child(5) { animation-delay: 0.28s; }
+  .row > *:nth-child(6) { animation-delay: 0.35s; }
+}
